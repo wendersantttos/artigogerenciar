@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Artigo</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>{{ artigo.titulo }}</h1>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Sair</button>
+            </form>
+        {% endif %}
+    </header>
+    <main>
+        <section class="article-details">
+            <h2>Detalhes do Artigo</h2>
+            <p><strong>Autores:</strong> {{ artigo.autores }}</p>
+            <p><strong>Resumo:</strong> {{ artigo.resumo }}</p>
+            <p><strong>Abstract:</strong> {{ artigo.abstract }}</p>
+            <p><strong>Palavras-chave:</strong> {{ artigo.palavras_chave }}</p>
+            <p><strong>Data:</strong> {{ artigo.data }}</p>
+            <p><strong>Revista:</strong> {{ artigo.revista }}</p>
+            {% if artigo.arquivo %}
+                <p><strong>Arquivo:</strong> <a href="{{ artigo.arquivo.url }}" class="button download-button">Baixar PDF</a></p>
+            {% endif %}
+            <div class="actions">
+                <a href="{% url 'editar_artigo' artigo.id %}" class="button">Editar</a>
+                <a href="{% url 'excluir_artigo' artigo.id %}" class="button delete-button">Excluir</a>
+            </div>
+            <a href="{% url 'listar_artigos' %}" class="button back-button">Voltar à Lista de Artigos</a>
+        </section>
+    </main>
+</body>
+</html>

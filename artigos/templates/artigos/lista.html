@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Artigos</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="header-title">Lista de Artigos</h1>
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="button logout-button">Sair</button>
+                </form>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="search-section">
+            <form method="get" action="{% url 'listar_artigos' %}" class="search-form">
+                <input type="text" name="q" placeholder="Buscar artigos..." value="{{ query }}" class="search-input" aria-label="Buscar artigos">
+                <button type="submit" class="button search-button">Buscar</button>
+            </form>
+        </section>
+
+        <section class="articles-list">
+            {% if artigos %}
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th><a href="?q={{ query }}&o=titulo" class="table-header">Título</a></th>
+                            <th><a href="?q={{ query }}&o=autores" class="table-header">Autores</a></th>
+                            <th><a href="?q={{ query }}&o=revista" class="table-header">Revista</a></th>
+                            <th><a href="?q={{ query }}&o=data" class="table-header">Data</a></th>
+                            <th class="table-header">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for artigo in artigos %}
+                            <tr>
+                                <td>{{ artigo.titulo }}</td>
+                                <td>{{ artigo.autores }}</td>
+                                <td>{{ artigo.revista }}</td>
+                                <td>{{ artigo.data }}</td>
+                                <td>
+                                    <a href="{% url 'visualizar_artigo' artigo.id %}" class="button view-button">Visualizar</a>
+                                    <a href="{% url 'editar_artigo' artigo.id %}" class="button edit-button">Editar</a>
+                                    <a href="{% url 'excluir_artigo' artigo.id %}" class="button delete-button">Excluir</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-results-message">Nenhum artigo encontrado.</p>
+            {% endif %}
+        </section>
+
+        <section class="pagination">
+            <div class="pagination-links">
+                {% if artigos.has_previous %}
+                    <a href="?q={{ query }}&o={{ order }}&page=1" class="pagination-link">Primeira</a>
+                    <a href="?q={{ query }}&o={{ order }}&page={{ artigos.previous_page_number }}" class="pagination-link">Anterior</a>
+                {% endif %}
+
+                <span class="current-page">
+                    Página {{ artigos.number }} de {{ artigos.paginator.num_pages }}.
+                </span>
+
+                {% if artigos.has_next %}
+                    <a href="?q={{ query }}&o={{ order }}&page={{ artigos.next_page_number }}" class="pagination-link">Próxima</a>
+                    <a href="?q={{ query }}&o={{ order }}&page={{ artigos.paginator.num_pages }}" class="pagination-link">Última</a>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <a href="{% url 'criar_artigo' %}" class="button add-button">Adicionar Novo Artigo</a>
+        </div>
+    </footer>
+</body>
+</html>

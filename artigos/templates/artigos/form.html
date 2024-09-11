@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Editar Artigo{% else %}Criar Artigo{% endif %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Ícones do Material Design -->
+</head>
+<body>
+    <header>
+        <h1>{% if form.instance.pk %}Editar Artigo{% else %}Criar Artigo{% endif %}</h1>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Sair</button>
+            </form>
+        {% endif %}
+    </header>
+    <main>
+        <section class="form-container">
+            <form method="post" enctype="multipart/form-data" class="form-style">
+                {% csrf_token %}
+                
+                <!-- Título do Artigo -->
+                <div class="form-group">
+                    <label for="id_titulo">Título:</label>
+                    {{ form.titulo }}
+                </div>
+
+                <!-- Autores -->
+                <div class="form-group">
+                    <label for="id_autores">Autores:</label>
+                    {{ form.autores }}
+                </div>
+
+                <!-- Resumo -->
+                <div class="form-group">
+                    <label for="id_resumo">Resumo:</label>
+                    {{ form.resumo }}
+                </div>
+
+                <!-- Abstract -->
+                <div class="form-group">
+                    <label for="id_abstract">Abstract:</label>
+                    {{ form.abstract }}
+                </div>
+
+                <!-- Palavras-chave -->
+                <div class="form-group">
+                    <label for="id_palavras_chave">Palavras-chave:</label>
+                    {{ form.palavras_chave }}
+                </div>
+
+                <!-- Data -->
+                <div class="form-group">
+                    <label for="id_data">Data:</label>
+                    {{ form.data }}
+                </div>
+
+                <!-- Revista -->
+                <div class="form-group">
+                    <label for="id_revista">Revista:</label>
+                    {{ form.revista }}
+                </div>
+
+                <!-- Arquivo -->
+                <div class="form-group">
+                    <label for="id_arquivo">Arquivo:</label>
+                    {{ form.arquivo }}
+                </div>
+
+                <!-- Sugestões -->
+                <div class="form-group">
+                    <label for="id_sugestoes">Sugestões:</label>
+                    {{ form.sugestoes }}
+                </div>
+
+                <!-- Botão de Envio -->
+                <div class="form-buttons">
+                    <button type="submit" class="button primary-button">
+                        <i class="material-icons">save</i> {% if form.instance.pk %}Salvar Alterações{% else %}Criar Artigo{% endif %}
+                    </button>
+                    <a href="{% url 'listar_artigos' %}" class="button back-button">
+                        <i class="material-icons">arrow_back</i> Voltar à Lista de Artigos
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button logout-button">Sair</button>
+            </form>
+        {% endif %}
+    </header>
+    <main>
+        <section class="login-form">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="button">Entrar</button>
+            </form>
+            <a href="{% url 'listar_artigos' %}" class="button back-button">Voltar à Lista de Artigos</a>
+        </section>
+    </main>
+</body>
+</html>

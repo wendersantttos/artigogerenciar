@@ -1,0 +1,31 @@
+<!-- confirmar_exclusao.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Exclusão</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Confirmar Exclusão</h1>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button logout-button">Sair</button>
+            </form>
+        {% endif %}
+    </header>
+    <main>
+        <section class="confirmation">
+            <p>Tem certeza de que deseja excluir o artigo "{{ artigo.titulo }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="button delete-button">Confirmar Exclusão</button>
+            </form>
+            <a href="{% url 'listar_artigos' %}" class="button back-button">Cancelar</a>
+        </section>
+    </main>
+</body>
+</html>
